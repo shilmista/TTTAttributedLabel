@@ -1,17 +1,17 @@
 // TTTAttributedLabel.h
 //
 // Copyright (c) 2011 Mattt Thompson (http://mattt.me)
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -134,19 +134,19 @@ extern NSString * const kTTTBackgroundCornerRadiusAttributeName;
 ///---------------------------------------
 
 /**
- The shadow blur radius for the label. A value of 0 indicates no blur, while larger values produce correspondingly larger blurring. This value must not be negative. The default value is 0. 
+ The shadow blur radius for the label. A value of 0 indicates no blur, while larger values produce correspondingly larger blurring. This value must not be negative. The default value is 0.
  */
 @property (nonatomic, assign) CGFloat shadowRadius;
 
-/** 
+/**
  The shadow blur radius for the label when the label's `highlighted` property is `YES`. A value of 0 indicates no blur, while larger values produce correspondingly larger blurring. This value must not be negative. The default value is 0.
  */
 @property (nonatomic, assign) CGFloat highlightedShadowRadius;
-/** 
+/**
  The shadow offset for the label when the label's `highlighted` property is `YES`. A size of {0, 0} indicates no offset, with positive values extending down and to the right. The default size is {0, 0}.
  */
 @property (nonatomic, assign) CGSize highlightedShadowOffset;
-/** 
+/**
  The shadow color for the label when the label's `highlighted` property is `YES`. The default value is `nil` (no shadow color).
  */
 @property (nonatomic, strong) UIColor *highlightedShadowColor;
@@ -156,12 +156,12 @@ extern NSString * const kTTTBackgroundCornerRadiusAttributeName;
 ///--------------------------------------------
 
 /**
- The distance, in points, from the leading margin of a frame to the beginning of the paragraph's first line. This value is always nonnegative, and is 0.0 by default. 
+ The distance, in points, from the leading margin of a frame to the beginning of the paragraph's first line. This value is always nonnegative, and is 0.0 by default.
  */
 @property (nonatomic, assign) CGFloat firstLineIndent;
 
 /**
- The space in points added between lines within the paragraph. This value is always nonnegative and is 0.0 by default. 
+ The space in points added between lines within the paragraph. This value is always nonnegative and is 0.0 by default.
  */
 @property (nonatomic, assign) CGFloat leading;
 
@@ -173,7 +173,7 @@ extern NSString * const kTTTBackgroundCornerRadiusAttributeName;
 /**
  The distance, in points, from the margin to the text container. This value is `UIEdgeInsetsZero` by default.
  
- @discussion The `UIEdgeInset` members correspond to paragraph style properties rather than a particular geometry, and can change depending on the writing direction. 
+ @discussion The `UIEdgeInset` members correspond to paragraph style properties rather than a particular geometry, and can change depending on the writing direction.
  
  ## `UIEdgeInset` Member Correspondence With `CTParagraphStyleSpecifier` Values:
  
@@ -192,7 +192,7 @@ extern NSString * const kTTTBackgroundCornerRadiusAttributeName;
 
 /**
  The truncation token that appears at the end of the truncated line. `nil` by default.
-
+ 
  @discussion When truncation is enabled for the label, by setting `lineBreakMode` to either `UILineBreakModeHeadTruncation`, `UILineBreakModeTailTruncation`, or `UILineBreakModeMiddleTruncation`, the token used to terminate the truncated line will be `truncationTokenString` if defined, otherwise the Unicode Character 'HORIZONTAL ELLIPSIS' (U+2026).
  */
 @property (nonatomic, strong) NSString *truncationTokenString;
@@ -205,7 +205,7 @@ extern NSString * const kTTTBackgroundCornerRadiusAttributeName;
  Sets the text displayed by the label.
  
  @param text An `NSString` or `NSAttributedString` object to be displayed by the label. If the specified text is an `NSString`, the label will display the text like a `UILabel`, inheriting the text styles of the label. If the specified text is an `NSAttributedString`, the label text styles will be overridden by the styles specified in the attributed string.
-  
+ 
  @discussion This method overrides `UILabel -setText:` to accept both `NSString` and `NSAttributedString` objects. This string is `nil` by default.
  */
 - (void)setText:(id)text;
@@ -265,7 +265,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
  @param addressComponents A dictionary of address components for the address to be linked to
  @param range The range in the label text of the link. The range must not exceed the bounds of the receiver.
  
- @discussion The address component dictionary keys are described in `NSTextCheckingResult`'s "Keys for Address Components." 
+ @discussion The address component dictionary keys are described in `NSTextCheckingResult`'s "Keys for Address Components."
  */
 - (void)addLinkToAddress:(NSDictionary *)addressComponents
                withRange:(NSRange)range;
@@ -303,7 +303,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
 
 /**
  Adds a link to transit information for a specified range in the label text.
-
+ 
  @param components A dictionary containing the transit components. The currently supported keys are `NSTextCheckingAirlineKey` and `NSTextCheckingFlightKey`.
  @param range The range in the label text of the link. The range must not exceed the bounds of the receiver.
  */
@@ -373,7 +373,7 @@ didSelectLinkWithPhoneNumber:(NSString *)phoneNumber;
 
 /**
  Tells the delegate that the user did select a link to transit information
-
+ 
  @param label The label whose link was selected.
  @param components A dictionary containing the transit components. The currently supported keys are `NSTextCheckingAirlineKey` and `NSTextCheckingFlightKey`.
  */
@@ -390,5 +390,18 @@ didSelectLinkWithTransitInformation:(NSDictionary *)components;
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
 didSelectLinkWithTextCheckingResult:(NSTextCheckingResult *)result;
+
+@optional
+/**
+ Tells the delegate that the user did select a link to a hashtag(#) or mention (@).
+ 
+ @param label The label whose link was selected.
+ @param url The URL for the selected hashtag(#) or mention (@).
+ */
+- (void)attributedLabel:(TTTAttributedLabel *)label
+didSelectHashtagOrMentionWithURL:(NSURL *)url;
+
+- (void)attributedLabel:(TTTAttributedLabel *)label
+didSelectHashtagOrMentionWithString:(NSString *)string;
 
 @end
