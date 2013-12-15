@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "TTTAttributedLabel.h"
+#import "Constants.h"
 
 #define kTTTLineBreakWordWrapTextWidthScalingFactor (M_PI / M_E)
 
@@ -60,7 +61,9 @@ static inline  NSRegularExpression * UserNameAndHashRegularExpression()
     static NSRegularExpression *_usernameAndHashRegularExpression = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _usernameAndHashRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"(?:^|\\s|[\\p{Punct}&&[^/]])((#[\\p{L}0-9-_]+)|(@[\\p{L}0-9-_\\.]+))"
+        // original reg ex
+        // @"(?:^|\\s|[\\p{Punct}&&[^/]])((#[\\p{L}0-9-_]+)|(@[\\p{L}0-9-_\\.]+))"
+        _usernameAndHashRegularExpression = [[NSRegularExpression alloc] initWithPattern:@"(?:^|\\s|[\\p{Punct}&&[^/]])((#[\\p{L}0-9-\\._]+)|(@[\\p{L}0-9-\\._\\.]+))"
                                                                                  options:NSRegularExpressionCaseInsensitive
                                                                                    error:nil];
     });
@@ -97,7 +100,7 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(TTTAttributed
         [mutableAttributes setObject:(__bridge id)font forKey:(NSString *)kCTFontAttributeName];
         CFRelease(font);
         
-        [mutableAttributes setObject:(id)[label.textColor CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];
+        [mutableAttributes setObject:(__bridge id)[label.textColor CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];
         
         CTTextAlignment alignment = CTTextAlignmentFromUITextAlignment(label.textAlignment);
         CGFloat lineSpacing = label.leading;
@@ -1067,7 +1070,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
         
         switch (result.resultType) {
             case NSTextCheckingTypeRegularExpression:
-                DLog(@"checking type hashtag etc");
+                DDLogVerbose(@"checking type hashtag etc");
                 if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectHashtagOrMentionWithURL:)]) {
                     NSRange range = NSMakeRange (result.range.location, result.range.length);
                     NSString *substr = [[self.attributedText string] substringWithRange: range];
@@ -1078,7 +1081,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
                 }
                 break;
             case NSTextCheckingTypeLink:
-                DLog(@"checking type link");
+                DDLogVerbose(@"checking type link");
                 if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithURL:)]) {
                     [self.delegate attributedLabel:self didSelectLinkWithURL:result.URL];
                     return;
